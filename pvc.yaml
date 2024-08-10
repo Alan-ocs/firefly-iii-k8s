@@ -1,24 +1,22 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: firefly-iii-upload-pvc  # The name of the PVC object for uploads.
+  name: firefly-iii-upload-pvc
 spec:
   accessModes:
-  - ReadWriteMany  # Allows read/write access by multiple nodes.
+    - ReadWriteMany
   resources:
     requests:
-      storage: 1Gi  # Request 1Gi of persistent storage for the uploads volume.
-  storageClassName: default  # Should match the StorageClass name used in the PV.
+      storage: 1Gi
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: firefly-iii-db-pvc  # The name of the PVC object for the database.
+  name: firefly-iii-db-pvc
 spec:
   accessModes:
-  - ReadWriteMany  # Allows read/write access by multiple nodes.
+    - ReadWriteMany
   resources:
     requests:
-      storage: 5Gi  # Request 5Gi of persistent storage for the database volume.
-  storageClassName: default  # Should match the StorageClass name used in the PV.
+      storage: 5Gi
