@@ -4,10 +4,9 @@ metadata:
   name: firefly-iii-pv
 spec:
   capacity:
-    storage: 10Gi  # Total storage capacity for this volume.
+    storage: 10Gi
   accessModes:
-    - ReadWriteMany  # Allows multiple nodes to mount the volume for read/write operations.
-  persistentVolumeReclaimPolicy: Retain  # Keep the data if the PVC is deleted.
-  storageClassName: default  # Ensure this matches the StorageClass name in your PVC.
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: "/var/mnt/data"  # Path on the host where the volume is stored.
+    path: "/var/mnt/data"
