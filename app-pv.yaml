@@ -9,4 +9,4 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: "/var/mnt/data"
+    path: "/var/mnt/data/firefly"
