@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firefly-iii-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: firefly-iii-db
+  template:
+    metadata:
+      labels:
+        app: firefly-iii-db
+    spec:
+      containers:
+      - name: mariadb
+        image: mariadb:lts
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: firefly-iii-secrets
+              key: mariadb-root-password
+        volumeMounts:
+        - name: firefly-iii-db
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: firefly-iii-db
+        persistentVolumeClaim:
+          claimName: firefly-iii-db-pvc
