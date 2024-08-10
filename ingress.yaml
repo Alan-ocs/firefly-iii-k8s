@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: firefly-iii  # The name of the Ingress object.
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /  # Annotation to rewrite the target URL.
+spec:
+  rules:
+  - host: firefly.yourdomain.com  # The domain name for the application.
+    http:
+      paths:
+      - path: /  # The path exposed via the Ingress.
+        pathType: Prefix
+        backend:
+          service:
+            name: firefly-iii  # Name of the Service to route traffic to.
+            port:
+              number: 80  # Port of the Service to route traffic to.
