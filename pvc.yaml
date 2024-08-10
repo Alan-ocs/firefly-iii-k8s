@@ -4,10 +4,11 @@ metadata:
   name: firefly-iii-upload-pvc  # The name of the PVC object for uploads.
 spec:
   accessModes:
-  - ReadWriteOnce  # Allows read/write access by a single node.
+  - ReadWriteMany  # Allows read/write access by multiple nodes.
   resources:
     requests:
       storage: 1Gi  # Request 1Gi of persistent storage for the uploads volume.
+  storageClassName: default  # Should match the StorageClass name used in the PV.
 
 ---
 apiVersion: v1
@@ -16,7 +17,8 @@ metadata:
   name: firefly-iii-db-pvc  # The name of the PVC object for the database.
 spec:
   accessModes:
-  - ReadWriteOnce  # Allows read/write access by a single node.
+  - ReadWriteMany  # Allows read/write access by multiple nodes.
   resources:
     requests:
       storage: 5Gi  # Request 5Gi of persistent storage for the database volume.
+  storageClassName: default  # Should match the StorageClass name used in the PV.
