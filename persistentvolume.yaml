@@ -9,7 +9,7 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: "/var/mnt/data/upload"
+    path: "/var/mnt/data"
 
 ---
 apiVersion: v1
@@ -23,4 +23,4 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: "/var/mnt/data/db"
+    path: "/var/mnt/data"
