@@ -6,56 +6,60 @@ spec:
   replicas: 1  # Number of pod replicas to run.
   selector:
     matchLabels:
-      app: firefly-iii  # Selector to match pods with the label "app: firefly-iii".
+      app: firefly-iii  # Label selector to identify the pods managed by this Deployment.
   template:
     metadata:
       labels:
-        app: firefly-iii  # Label applied to the pods created by this deployment.
+        app: firefly-iii  # Labels for the pods created by this Deployment.
     spec:
       containers:
-      - name: firefly-iii  # Name of the container running in the pod.
-        image: fireflyiii/core:latest  # The Docker image to run.
+      - name: firefly-iii  # Name of the container.
+        image: fireflyiii/core:latest  # Docker image to use for the container.
         ports:
-        - containerPort: 8080  # The port on which the application listens.
+        - containerPort: 8080  # Port on which the container will listen.
+        envFrom:
+        - configMapRef:
+            name: firefly-iii-config  # Reference to the ConfigMap for environment variables.
+        - secretRef:
+            name: firefly-iii-secrets 
         volumeMounts:
         - name: firefly-iii-upload
-          mountPath: /var/www/html/storage/upload  # Mounts the volume at this path inside the container.
-        envFrom:
-        - secretRef:
-            name: firefly-iii-secrets  # Refers to a Kubernetes Secret named "firefly-iii-secrets".
+          mountPath: /var/www/html/storage/upload  # Path in the container where the volume will be mounted.
       volumes:
       - name: firefly-iii-upload
         persistentVolumeClaim:
-          claimName: firefly-iii-pvc  # Refers to the PersistentVolumeClaim defined in pvc.yaml.
+          claimName: firefly-iii-upload-pvc  # Reference to the PersistentVolumeClaim for the storage volume.
 
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: firefly-iii-db  # The name of the Deployment object for the database.
 spec:
-  replicas: 1  # Number of pod replicas to run for the database.
+  replicas: 1  # Number of pod replicas to run.
   selector:
     matchLabels:
-      app: firefly-iii-db  # Selector to match pods with the label "app: firefly-iii-db".
+      app: firefly-iii-db  # Label selector to identify the pods managed by this Deployment.
   template:
     metadata:
       labels:
-        app: firefly-iii-db  # Label applied to the pods created by this deployment.
+        app: firefly-iii-db  # Labels for the pods created by this Deployment.
     spec:
       containers:
-      - name: mariadb  # Name of the container running the MariaDB database.
-        image: mariadb:lts  # The Docker image for MariaDB.
+      - name: mariadb  # Name of the container.
+        image: mariadb:lts  # Docker image to use for the container.
         ports:
-        - containerPort: 3306  # The port on which the database listens.
-        volumeMounts:
-        - name: firefly-iii-db-data
-          mountPath: /var/lib/mysql  # Mounts the volume at this path inside the container.
+        - containerPort: 3306  # Port on which the container will listen.
         envFrom:
+        - configMapRef:
+            name: firefly-iii-config # Reference to the ConfigMap for environment variables.
         - secretRef:
-            name: mariadb-secrets  # Refers to a Kubernetes Secret named "mariadb-secrets".
+            name: firefly-iii-secrets 
+
+        volumeMounts:
+        - name: firefly-iii-db
+          mountPath: /var/lib/mysql  # Path in the container where the volume will be mounted.
       volumes:
-      - name: firefly-iii-db-data
+      - name: firefly-iii-db
         persistentVolumeClaim:
-          claimName: firefly-iii-db-pvc  # Refers to the PersistentVolumeClaim defined in pvc.yaml.
+          claimName: firefly-iii-db-pvc  # Reference to the PersistentVolumeClaim for the storage volume.
