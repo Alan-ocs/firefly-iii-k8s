@@ -20,8 +20,6 @@ spec:
         envFrom:
         - configMapRef:
             name: firefly-iii-config  # Reference to the ConfigMap for environment variables.
-        - secretRef:
-            name: firefly-iii-secrets 
         volumeMounts:
         - name: firefly-iii-upload
           mountPath: /var/www/html/storage/upload  # Path in the container where the volume will be mounted.
@@ -50,12 +48,12 @@ spec:
         image: mariadb:lts  # Docker image to use for the container.
         ports:
         - containerPort: 3306  # Port on which the container will listen.
-        envFrom:
-        - configMapRef:
-            name: firefly-iii-config # Reference to the ConfigMap for environment variables.
-        - secretRef:
-            name: firefly-iii-secrets 
-
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: firefly-iii-secrets
+              key: mariadb-root-password
         volumeMounts:
         - name: firefly-iii-db
           mountPath: /var/lib/mysql  # Path in the container where the volume will be mounted.
